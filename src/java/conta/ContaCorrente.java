@@ -6,10 +6,15 @@
 package conta;
 
 import entidade.Cliente;
+import interfaces.ContaCorrenteRemote;
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.ejb.CreateException;
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +22,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 
 /**
@@ -24,7 +30,8 @@ import javax.persistence.Temporal;
  * @author RodrigoSoldi
  */
 @Entity
-public class ContaCorrente implements Serializable {
+@Stateful
+public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     
     @OneToMany(mappedBy = "contaCorrente", cascade = CascadeType.ALL)
     private List<Cartao> cartoes;
@@ -46,6 +53,7 @@ public class ContaCorrente implements Serializable {
     private String agencia;
     private float saldo;
     
+    @EJB
     @OneToOne(cascade = CascadeType.ALL)
     private Cliente cliente;
 
@@ -154,6 +162,29 @@ public class ContaCorrente implements Serializable {
     @Override
     public String toString() {
         return "conta.Conta[ id=" + id + " ]";
+    }
+
+    @Override
+    public boolean autenticarConta(String agencia, String conta) {
+        if(agencia.equals("42552") && conta.equals("127957")){
+            this.getCliente().setNome("Rodrigo Soldi Lopes");
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public boolean login(String senha) {
+        if(senha.equals("123456"))
+            return true;
+        
+        return false;
+    }
+
+    @Override
+    public ContaCorrenteRemote create() throws CreateException, RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

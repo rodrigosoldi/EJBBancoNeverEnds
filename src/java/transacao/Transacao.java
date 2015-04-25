@@ -7,6 +7,7 @@ package transacao;
 
 import conta.ContaCorrente;
 import entidade.Cliente;
+import persistence.iPersistencia;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.CascadeType;
@@ -18,6 +19,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import persistence.PersistenciaImpl;
 
 /**
  *
@@ -25,7 +27,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Transacao implements Serializable {
+public abstract class Transacao implements Serializable, iPersistencia {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -37,7 +39,7 @@ public abstract class Transacao implements Serializable {
     
     private float valor;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Cliente cliente;
     
     @ManyToOne(cascade = CascadeType.ALL)
@@ -119,6 +121,21 @@ public abstract class Transacao implements Serializable {
     @Override
     public String toString() {
         return "transacao.Transacao[ id=" + id + " ]";
+    }
+
+    @Override
+    public void save() {
+        PersistenciaImpl.getInstance().save(this);
+    }
+
+    @Override
+    public void delete() {
+        PersistenciaImpl.getInstance().delete(this);
+    }
+
+    @Override
+    public void update() {
+        PersistenciaImpl.getInstance().update(this);
     }
     
 }

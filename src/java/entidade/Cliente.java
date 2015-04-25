@@ -6,10 +6,12 @@
 package entidade;
 
 import conta.ContaCorrente;
+import persistence.iPersistencia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.ejb.Stateful;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,13 +20,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import persistence.PersistenciaImpl;
 
 /**
  *
  * @author RodrigoSoldi
  */
 @Entity
-public class Cliente implements Serializable {
+@Stateful
+public class Cliente implements Serializable, iPersistencia {
     
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private ContaCorrente contaCorrente;
@@ -113,15 +117,28 @@ public class Cliente implements Serializable {
             return false;
         }
         Cliente other = (Cliente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
     public String toString() {
         return "entidade.Cliente[ id=" + id + " ]";
     }
+
+    @Override
+    public void save() {
+        PersistenciaImpl.getInstance().save(this);
+    }
+
+    @Override
+    public void delete() {
+        PersistenciaImpl.getInstance().delete(this);
+    }
+
+    @Override
+    public void update() {
+        PersistenciaImpl.getInstance().update(this);
+    }
+
     
 }

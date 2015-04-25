@@ -16,6 +16,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface ContaCorrenteRemote {
+    
     public boolean autenticarConta(String agencia, String conta);
     public boolean login(String senha);
 

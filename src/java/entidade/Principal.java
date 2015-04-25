@@ -22,6 +22,7 @@ import transacao.Transferencia;
  */
 public class Principal {
     public static void main(String[] args) {
+        
         Cliente cliente = new Cliente();
         cliente.setNome("Rodrigo Soldi");
         cliente.setCpf("43856161830");
@@ -67,23 +68,16 @@ public class Principal {
         cartao1.setValidade(new GregorianCalendar());
         contaCorrente.addCartao(cartao1);
         
-        Transacao transacao = new Transferencia();
+        Transferencia transacao = new Transferencia();
         transacao.setDataTransacao(new GregorianCalendar());
         transacao.setValor(200);
         transacao.setContaCorrente(contaCorrente);
-        transacao.setCliente(cliente);
+        transacao.setTipo("Teste");
+        transacao.setCliente(cliente);        
         transacao.debitar();
         
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("EJBBancoNeverEndsPU");
-        EntityManager em = factory.createEntityManager();
-        
-        em.getTransaction().begin();
-        em.persist(cliente);
-        em.persist(transacao);
-        em.getTransaction().commit();
-        em.close();
-        factory.close();
-        
+        cliente.save();
+        transacao.save();                       
     }
     
 }
