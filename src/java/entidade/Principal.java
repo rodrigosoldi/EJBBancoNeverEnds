@@ -13,6 +13,8 @@ import java.util.GregorianCalendar;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import transacao.Transacao;
+import transacao.Transferencia;
 
 /**
  *
@@ -39,7 +41,7 @@ public class Principal {
         ContaCorrente contaCorrente = new ContaCorrente();
         contaCorrente.setAgencia("42552");
         contaCorrente.setNumConta("127957");
-        contaCorrente.setSaldo((float) 70000.2);
+        contaCorrente.setSaldo((float) 500);
         contaCorrente.setDataCriacao(new GregorianCalendar());
         contaCorrente.setSenha("123456");
         contaCorrente.setCliente(cliente);
@@ -65,11 +67,19 @@ public class Principal {
         cartao1.setValidade(new GregorianCalendar());
         contaCorrente.addCartao(cartao1);
         
+        Transacao transacao = new Transferencia();
+        transacao.setDataTransacao(new GregorianCalendar());
+        transacao.setValor(200);
+        transacao.setContaCorrente(contaCorrente);
+        transacao.setCliente(cliente);
+        transacao.debitar();
+        
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("EJBBancoNeverEndsPU");
         EntityManager em = factory.createEntityManager();
         
         em.getTransaction().begin();
         em.persist(cliente);
+        em.persist(transacao);
         em.getTransaction().commit();
         em.close();
         factory.close();
