@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package entidade;
+package interfaces;
 
 import javax.ejb.Remote;
 

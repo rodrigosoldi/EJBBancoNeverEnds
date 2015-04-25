@@ -3,32 +3,64 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package transacao;
+package conta;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author RodrigoSoldi
  */
 @Entity
-public class Transacao implements Serializable {
+public class ContaPoupanca implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String numConta;
+    private float saldo;
+    
+    @OneToOne(mappedBy = "contaPoupanca", cascade = CascadeType.ALL)
+    private ContaCorrente contaCorrente;
+    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNumConta() {
+        return numConta;
+    }
+
+    public void setNumConta(String numConta) {
+        this.numConta = numConta;
+    }
+
+    public float getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
+    }
+
+    public ContaCorrente getContaCorrente() {
+        return contaCorrente;
+    }
+
+    public void setContaCorrente(ContaCorrente contaCorrente) {
+        this.contaCorrente = contaCorrente;
     }
 
     @Override
@@ -41,10 +73,10 @@ public class Transacao implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Transacao)) {
+        if (!(object instanceof ContaPoupanca)) {
             return false;
         }
-        Transacao other = (Transacao) object;
+        ContaPoupanca other = (ContaPoupanca) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -53,7 +85,7 @@ public class Transacao implements Serializable {
 
     @Override
     public String toString() {
-        return "transacao.Transacao[ id=" + id + " ]";
+        return "conta.ContaPoupanca[ id=" + id + " ]";
     }
     
 }

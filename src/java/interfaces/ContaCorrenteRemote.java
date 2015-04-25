@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package conta;
+package interfaces;
 
 import java.rmi.RemoteException;
 import javax.ejb.CreateException;
