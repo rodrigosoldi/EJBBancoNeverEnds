@@ -5,6 +5,8 @@
  */
 package persistence;
 
+import java.util.List;
+
 /**
  *
  * @author RodrigoSoldi
@@ -13,4 +15,5 @@ public interface iPersistencia {
     void save();
     void delete();
     void update();
+    List<Object> list();
 }

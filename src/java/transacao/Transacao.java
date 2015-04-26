@@ -10,6 +10,7 @@ import entidade.Cliente;
 import persistence.iPersistencia;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import persistence.PersistenciaImpl;
+import persistence.PersistenceImpl;
 
 /**
  *
@@ -125,17 +126,22 @@ public abstract class Transacao implements Serializable, iPersistencia {
 
     @Override
     public void save() {
-        PersistenciaImpl.getInstance().save(this);
+        PersistenceImpl.getInstance().save(this);
     }
 
     @Override
     public void delete() {
-        PersistenciaImpl.getInstance().delete(this);
+        PersistenceImpl.getInstance().delete(this);
     }
 
     @Override
     public void update() {
-        PersistenciaImpl.getInstance().update(this);
+        PersistenceImpl.getInstance().update(this);
     }
+
+    @Override
+    public List<Object> list() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }    
     
 }

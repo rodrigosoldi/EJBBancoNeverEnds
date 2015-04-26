@@ -20,7 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
-import persistence.PersistenciaImpl;
+import persistence.PersistenceImpl;
 
 /**
  *
@@ -127,17 +127,22 @@ public class Cliente implements Serializable, iPersistencia {
 
     @Override
     public void save() {
-        PersistenciaImpl.getInstance().save(this);
+        PersistenceImpl.getInstance().save(this);
     }
 
     @Override
     public void delete() {
-        PersistenciaImpl.getInstance().delete(this);
+        PersistenceImpl.getInstance().delete(this);
     }
 
     @Override
     public void update() {
-        PersistenciaImpl.getInstance().update(this);
+        PersistenceImpl.getInstance().update(this);
+    }
+
+    @Override
+    public List<Object> list() {
+        return PersistenceImpl.getInstance().list(this.getClass());
     }
 
     

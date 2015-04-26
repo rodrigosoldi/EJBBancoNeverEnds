@@ -22,8 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
+import persistence.ContaCorrentePersistenceImpl;
 
 /**
  *
@@ -153,10 +153,7 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
             return false;
         }
         ContaCorrente other = (ContaCorrente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override
@@ -166,25 +163,19 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
 
     @Override
     public boolean autenticarConta(String agencia, String conta) {
-        if(agencia.equals("42552") && conta.equals("127957")){
-            this.getCliente().setNome("Rodrigo Soldi Lopes");
-            return true;
-        }
-        
-        return false;
+        ContaCorrente contaCorrente = ContaCorrentePersistenceImpl.existAccount(agencia, conta);
+        this.setSenha(contaCorrente.getSenha());
+        return contaCorrente != null;
     }
 
     @Override
     public boolean login(String senha) {
-        if(senha.equals("123456"))
-            return true;
-        
-        return false;
+        return this.getSenha().equals(senha);
     }
 
     @Override
     public ContaCorrenteRemote create() throws CreateException, RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this;
     }
     
 }

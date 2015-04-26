@@ -76,8 +76,12 @@ public class Principal {
         transacao.setCliente(cliente);        
         transacao.debitar();
         
-        cliente.save();
-        transacao.save();                       
+//        cliente.save();
+//        transacao.save();
+        
+//        cliente.list();
+        
+        contaCorrente.autenticarConta("42552", "127957");
     }
     
 }

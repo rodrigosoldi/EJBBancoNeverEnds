@@ -5,28 +5,36 @@
  */
 package persistence;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
  * @author RodrigoSoldi
  */
-public class PersistenciaImpl{
+public class PersistenceImpl{
     
-    EntityManagerFactory factory;
-    EntityManager manager;
-    EntityTransaction transaction;
+    private final EntityManagerFactory factory;
+    private EntityManager manager;
+    private EntityTransaction transaction;
     
-    private PersistenciaImpl() {
+    private PersistenceImpl() {
         factory = Persistence.createEntityManagerFactory("EJBBancoNeverEndsPU");   
         manager = factory.createEntityManager();
     }
+
+    public EntityManagerFactory getFactory() {
+        return factory;
+    }    
     
-    public static PersistenciaImpl getInstance() {
+    public static PersistenceImpl getInstance() {
         return PersistenciaImplHolder.INSTANCE;
     }        
     
@@ -66,8 +74,20 @@ public class PersistenciaImpl{
         }
     }
     
+    public List<Object> list(Class classe){
+        try{
+            CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();            
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(classe);
+            Root objectos = criteriaQuery.from(classe);
+            criteriaQuery.select(objectos);                        
+            return manager.createQuery(criteriaQuery).getResultList();
+        }catch(PersistenceException e){
+        }
+        return null;
+    }
+    
     private static class PersistenciaImplHolder {
 
-        private static final PersistenciaImpl INSTANCE = new PersistenciaImpl();
+        private static final PersistenceImpl INSTANCE = new PersistenceImpl();
     }
 }
