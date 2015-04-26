@@ -28,7 +28,7 @@ import persistence.PersistenceImpl;
  */
 @Entity
 @Stateful
-public class Cliente implements Serializable, iPersistencia {
+public class Cliente implements Serializable {
     
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private ContaCorrente contaCorrente;
@@ -125,25 +125,4 @@ public class Cliente implements Serializable, iPersistencia {
         return "entidade.Cliente[ id=" + id + " ]";
     }
 
-    @Override
-    public void save() {
-        PersistenceImpl.getInstance().save(this);
-    }
-
-    @Override
-    public void delete() {
-        PersistenceImpl.getInstance().delete(this);
-    }
-
-    @Override
-    public void update() {
-        PersistenceImpl.getInstance().update(this);
-    }
-
-    @Override
-    public List<Object> list() {
-        return PersistenceImpl.getInstance().list(this.getClass());
-    }
-
-    
 }

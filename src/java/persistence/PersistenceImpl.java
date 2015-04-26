@@ -6,10 +6,12 @@
 package persistence;
 
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,25 +21,30 @@ import javax.persistence.criteria.Root;
  *
  * @author RodrigoSoldi
  */
-public class PersistenceImpl{
+@Stateless
+public class PersistenceImpl implements iPersistenceRemote{
     
     private final EntityManagerFactory factory;
-    private EntityManager manager;
-    private EntityTransaction transaction;
     
-    private PersistenceImpl() {
+    @PersistenceContext(unitName = "EJBBancoNeverEndsPU")
+    private EntityManager manager;
+    
+    private EntityTransaction transaction;
+
+    public PersistenceImpl() {
         factory = Persistence.createEntityManagerFactory("EJBBancoNeverEndsPU");   
         manager = factory.createEntityManager();
-    }
+    }    
 
     public EntityManagerFactory getFactory() {
         return factory;
-    }    
+    }         
+
+    public EntityManager getManager() {
+        return manager;
+    }
     
-    public static PersistenceImpl getInstance() {
-        return PersistenciaImplHolder.INSTANCE;
-    }        
-    
+    @Override
     public void save(Object o) {
         try{                                           
             transaction = manager.getTransaction();
@@ -49,6 +56,7 @@ public class PersistenceImpl{
         }
     }
 
+    @Override
     public void delete(Object o) {
         try{     
             transaction = manager.getTransaction();
@@ -60,6 +68,7 @@ public class PersistenceImpl{
         }
     }
 
+    @Override
     public void update(Object o) {
         try{            
             manager = factory.createEntityManager();
@@ -74,6 +83,7 @@ public class PersistenceImpl{
         }
     }
     
+    @Override
     public List<Object> list(Class classe){
         try{
             CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();            
@@ -85,9 +95,5 @@ public class PersistenceImpl{
         }
         return null;
     }
-    
-    private static class PersistenciaImplHolder {
 
-        private static final PersistenceImpl INSTANCE = new PersistenceImpl();
-    }
 }

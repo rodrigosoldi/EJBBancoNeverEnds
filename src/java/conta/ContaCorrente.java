@@ -40,6 +40,7 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     private ContaPoupanca contaPoupanca;
     
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -53,9 +54,9 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     private String agencia;
     private float saldo;
     
-    @EJB
+//    @EJB
     @OneToOne(cascade = CascadeType.ALL)
-    private Cliente cliente;
+    private Cliente cliente = new Cliente();
 
     public Long getId() {
         return id;
@@ -163,7 +164,7 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
 
     @Override
     public boolean autenticarConta(String agencia, String conta) {
-        ContaCorrente contaCorrente = ContaCorrentePersistenceImpl.existAccount(agencia, conta);
+        ContaCorrente contaCorrente = new ContaCorrentePersistenceImpl().existAccount(agencia, conta);
         this.setSenha(contaCorrente.getSenha());
         return contaCorrente != null;
     }
@@ -177,5 +178,7 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     public ContaCorrenteRemote create() throws CreateException, RemoteException {
         return this;
     }
+
+
     
 }

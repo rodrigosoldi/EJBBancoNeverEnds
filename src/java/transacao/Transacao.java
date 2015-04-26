@@ -28,7 +28,7 @@ import persistence.PersistenceImpl;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Transacao implements Serializable, iPersistencia {
+public abstract class Transacao implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -124,24 +124,4 @@ public abstract class Transacao implements Serializable, iPersistencia {
         return "transacao.Transacao[ id=" + id + " ]";
     }
 
-    @Override
-    public void save() {
-        PersistenceImpl.getInstance().save(this);
-    }
-
-    @Override
-    public void delete() {
-        PersistenceImpl.getInstance().delete(this);
-    }
-
-    @Override
-    public void update() {
-        PersistenceImpl.getInstance().update(this);
-    }
-
-    @Override
-    public List<Object> list() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
-    
 }

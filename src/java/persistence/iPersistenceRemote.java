@@ -6,16 +6,16 @@
 package persistence;
 
 import java.util.List;
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 /**
  *
  * @author RodrigoSoldi
  */
-@Local
-public interface iPersistencia {
-    void save();
-    void delete();
-    void update();
-    List<Object> list();
+@Remote
+public interface iPersistenceRemote {
+    void save(Object o);
+    void delete(Object o);
+    void update(Object o);
+    List<Object> list(Class classe);
 }
