@@ -17,8 +17,8 @@ import javax.ejb.Remote;
 @Remote
 public interface ContaCorrenteRemote {
     
-    public boolean autenticarConta(String agencia, String conta);
+    public Object[] autenticarConta(String agencia, String conta);
     public boolean login(String senha);
-
+    public boolean efetuarPagamento(String agencia, String conta, float valor);
     ContaCorrenteRemote create() throws CreateException, RemoteException;
 }

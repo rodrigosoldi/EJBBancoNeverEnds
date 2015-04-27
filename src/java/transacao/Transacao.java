@@ -28,7 +28,7 @@ import persistence.PersistenceImpl;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Transacao implements Serializable {
+public class Transacao implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
@@ -113,10 +113,7 @@ public abstract class Transacao implements Serializable {
             return false;
         }
         Transacao other = (Transacao) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
     }
 
     @Override

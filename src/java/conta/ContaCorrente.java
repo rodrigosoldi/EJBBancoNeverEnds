@@ -24,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import persistence.ContaCorrentePersistenceImpl;
+import transacao.Transacao;
 
 /**
  *
@@ -57,7 +58,18 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
 //    @EJB
     @OneToOne(cascade = CascadeType.ALL)
     private Cliente cliente = new Cliente();
+    
+    @OneToMany(mappedBy = "contaCorrente", cascade = CascadeType.ALL)
+    private List<Transacao> transacoes; 
 
+    public void addTransacao(Transacao transacao){
+        if(this.transacoes == null)
+            this.transacoes = new ArrayList<Transacao>();
+        
+        this.transacoes.add(transacao);
+        transacao.setContaCorrente(this);
+    }
+    
     public Long getId() {
         return id;
     }
@@ -140,6 +152,14 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
         this.cartoes = cartoes;
     }
 
+    public List<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(List<Transacao> transacoes) {
+        this.transacoes = transacoes;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -163,10 +183,8 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     }
 
     @Override
-    public boolean autenticarConta(String agencia, String conta) {
-        ContaCorrente contaCorrente = new ContaCorrentePersistenceImpl().existAccount(agencia, conta);
-        this.setSenha(contaCorrente.getSenha());
-        return contaCorrente != null;
+    public Object[] autenticarConta(String agencia, String conta) {
+        return new ContaCorrentePersistenceImpl().existAccount(agencia, conta);
     }
 
     @Override
@@ -178,6 +196,12 @@ public class ContaCorrente implements Serializable, ContaCorrenteRemote {
     public ContaCorrenteRemote create() throws CreateException, RemoteException {
         return this;
     }
+
+    @Override
+    public boolean efetuarPagamento(String agencia, String conta, float valor) {                
+        return new ContaCorrentePersistenceImpl().efetuarPagamento(agencia, conta, valor);
+    }
+
 
 
     
